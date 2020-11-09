@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import xml2js from 'xml2js'
 
+import TopBar from './TopBar.jsx';
 import AllStandings from './AllStandings.jsx';
 import DriverYear from './DriverYear.jsx';
 
@@ -21,40 +22,63 @@ const App = () => {
       })
   }, [])
 
-  const clickDriver = (last, first) => {
-    axios.get(`http://ergast.com/api/f1/${currYear.getFullYear()}/drivers/${last}/results`)
+  const clickDriver = (first, last, team) => {
+    let lowerFirst = first[0].toLowerCase();
+    let lowerLast = last[0].toLowerCase();
+
+    if (lowerLast === "verstappen") lowerLast = "max_verstappen";
+
+    if (lowerLast === "magnussen") lowerLast = "kevin_magnussen";
+
+    axios.get(`http://ergast.com/api/f1/${currYear.getFullYear()}/drivers/${lowerLast}/results`)
     .then(driverResp => {
       xml2js.parseStringPromise(driverResp.data)
         .then(driverResult => setDriverCurrYear(driverResult.MRData.RaceTable[0].Race))
     });
 
     setShowDriver(true);
-    currDriver.push(first, last);
+    currDriver.push(first, last, team);
+  }
+
+  const handleShowAll = () => {
+    setShowDriver(false);
+    setDriverCurrYear([]);
+    setCurrDriver([]);
+  }
+
+  const renderView = () => {
+    if (!showDriver) {
+      return (
+        <div>
+          <h1>{`${currYear.getFullYear()} Current Standings`}</h1>
+          <AllStandings standings={allStandings} clickDriver={clickDriver}/>
+        </div>
+      )
+    } else {
+      if (!driverCurrYear.length) {
+        return <h1>Loading Driver Data</h1>
+      } else {
+        return (
+          <div>
+            <h1>{`${currDriver[0]} ${currDriver[1]} (${currDriver[2]})`}</h1>
+            <DriverYear driver={driverCurrYear} />
+            <button className="showStandings" onClick={handleShowAll} >Show Standings</button>
+          </div>
+        )
+      }
+    }
   }
 
   if (!allStandings.length) {
     return(<h1>Loading Standings</h1>);
   }
 
-  if (!showDriver) {
-    return (
-      <div>
-        <h1>Current Standings</h1>
-        <AllStandings standings={allStandings} clickDriver={clickDriver}/>
-      </div>
-    )
-  } else {
-    if (!driverCurrYear.length) {
-      return <h1>Loading Driver Data</h1>
-    } else {
-      return (
-        <div>
-          <h1>{`${currDriver[0]} ${currDriver[1]}`}</h1>
-          <DriverYear driver={driverCurrYear} />
-        </div>
-      )
-    }
-  }
+  return(
+    <div>
+      <TopBar />
+      {renderView()}
+    </div>
+  )
 };
 
 export default App;

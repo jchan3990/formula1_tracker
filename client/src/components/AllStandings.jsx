@@ -4,8 +4,8 @@ import DriverStanding from './DriverStanding.jsx';
 
 const AllStandings = ({ standings, clickDriver }) => {
 
-  const onDriverClick = (first, last) => {
-    clickDriver(last, first);
+  const onDriverClick = (first, last, team) => {
+    clickDriver(first, last, team);
   }
 
   return (
