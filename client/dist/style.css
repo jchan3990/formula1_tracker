@@ -1,0 +1,28 @@
+.date {
+  width: 100px;
+}
+
+#driverName {
+  cursor: pointer;
+}
+
+#driverTable {
+  width: 800px;
+}
+
+.position, .points, .round, .date {
+  text-align: center;
+}
+
+.standingsContainer {
+  position: relative;
+}
+
+table {
+  width: 500px;
+}
+
+table, th, td {
+  border: solid black 1px;
+  border-collapse: collapse;
+}

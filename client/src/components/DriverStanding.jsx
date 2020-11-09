@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-const DriverStanding = ({ driver }) => {
+const DriverStanding = ({ driver, onDriverClick }) => {
+
+  const clickName = () => {
+    onDriverClick(driver[0].Driver[0].GivenName, driver[0].Driver[0].FamilyName);
+  }
+
   return (
-    <div>
-    {console.log(driver)}
-      <span>{`${driver[0].$.position} ${driver[0].Driver[0].GivenName} ${driver[0].Driver[0].FamilyName}`}</span>
-      <span>{` ${driver[0].$.points}`}</span>
-    </div>
+      <tr>
+        <td className="position"><span>{driver[0].$.position}</span></td>
+        <td className="driver"><span id="driverName" onClick={clickName}>{`${driver[0].Driver[0].GivenName} ${driver[0].Driver[0].FamilyName}`}</span></td>
+        <td className="points"><span>{driver[0].$.points}</span></td>
+      </tr>
   )
 };
 
