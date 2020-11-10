@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import DriverStanding from './DriverStanding.jsx';
 
 const AllStandings = ({ standings, clickDriver }) => {
-
   const onDriverClick = (first, last, team) => {
     clickDriver(first, last, team);
   }

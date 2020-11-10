@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 import logo from '../../dist/f1-logo.png'
 
-const TopBar = () => {
+const TopBar = ({ showAll, showSchedule }) => {
+  const handleShowAll = () => {
+    showAll(false, false);
+  }
+
+  const handleShowSchedule = () => {
+    showSchedule(true);
+  }
+
   return (
-    <nav>
+    <div id="topBarContainer">
       <img id="topBarLogo" src={logo} alt="F1 Logo" />
-      <span className="topBarBtns">Standings</span>
-      <span className="TopBarBtns">Full Schedule</span>
-    </nav>
+      <span className="topStandingsBtn" onClick={handleShowAll} >Standings</span>
+      <span className="topScheduleBtn" onClick={handleShowSchedule} >Full Schedule</span>
+    </div>
   )
 };
 

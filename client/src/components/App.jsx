@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import xml2js from 'xml2js'
+import xml2js from 'xml2js';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import TopBar from './TopBar.jsx';
 import AllStandings from './AllStandings.jsx';
 import DriverYear from './DriverYear.jsx';
+import FullSchedule from './FullSchedule.jsx';
 
 const App = () => {
   const [showDriver, setShowDriver] = useState(false);
+  const [showSchedule, setShowSchedule] = useState(false);
   const [allStandings, setAllStandings] = useState([]);
   const [driverCurrYear, setDriverCurrYear] = useState([]);
   const [currDriver, setCurrDriver] = useState([]);
@@ -40,21 +43,21 @@ const App = () => {
     currDriver.push(first, last, team);
   }
 
-  const handleShowAll = () => {
-    setShowDriver(false);
+  const handleShowAll = (showDriver, showSchedule) => {
+    setShowDriver(showDriver);
+    setShowSchedule(showSchedule);
+    setDriverCurrYear([]);
+    setCurrDriver([]);
+  }
+
+  const handleShowSchedule = (state) => {
+    setShowSchedule(state);
     setDriverCurrYear([]);
     setCurrDriver([]);
   }
 
   const renderView = () => {
-    if (!showDriver) {
-      return (
-        <div>
-          <h1>{`${currYear.getFullYear()} Current Standings`}</h1>
-          <AllStandings standings={allStandings} clickDriver={clickDriver}/>
-        </div>
-      )
-    } else {
+    if (showDriver) {
       if (!driverCurrYear.length) {
         return <h1>Loading Driver Data</h1>
       } else {
@@ -62,10 +65,24 @@ const App = () => {
           <div>
             <h1>{`${currDriver[0]} ${currDriver[1]} (${currDriver[2]})`}</h1>
             <DriverYear driver={driverCurrYear} />
-            <button className="showStandings" onClick={handleShowAll} >Show Standings</button>
+            <button className="showStandings" onClick={() => handleShowAll(false, false)} >Show Standings</button>
           </div>
         )
       }
+    } else if (showSchedule) {
+      return (
+        <div>
+          <h1>{`${currYear.getFullYear()} Schedule`}</h1>
+            <FullSchedule />
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <h1>{`${currYear.getFullYear()} Current Standings`}</h1>
+          <AllStandings standings={allStandings} clickDriver={clickDriver}/>
+        </div>
+      )
     }
   }
 
@@ -73,12 +90,13 @@ const App = () => {
     return(<h1>Loading Standings</h1>);
   }
 
-  return(
+  return (
     <div>
-      <TopBar />
+      <TopBar showAll={handleShowAll} showSchedule={handleShowSchedule} />
       {renderView()}
     </div>
   )
 };
 
 export default App;
+
