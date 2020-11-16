@@ -1,7 +1,7 @@
 const Parser = require('body-parser');
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(express.static('./client/dist'));
 app.use(Parser.urlencoded({extended: true}));
