@@ -1,5 +1,4 @@
 # F1 Tracker
 
-**Description**
-App to track the standings and driver results for each run for the current race season.
+App to track the standings and driver stats per each race for the current F1 Race Season.
 
